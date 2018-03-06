@@ -18,7 +18,10 @@ class DefaultController extends Controller
         'doing',
         'done',
         'ready for test',
-        'needs Info'
+        'needs info',
+        'need info',
+        'needs infos',
+        'need infos'
     ];
 
     private $taskLabel = 'task';
