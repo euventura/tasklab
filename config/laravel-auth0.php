@@ -39,7 +39,7 @@ return array(
     |
     */
 
-     'redirect_uri'  => 'http://tasklab.convenia.com.br/auth0/callback'
+     'redirect_uri'  => 'https://tasklab.convenia.com.br/auth0/callback'
 
     /*
     |--------------------------------------------------------------------------
