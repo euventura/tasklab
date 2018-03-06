@@ -119,7 +119,7 @@ class DefaultController extends Controller
         });
     }
 
-    private function isTask(Collection $labels): bool
+    private function isTask(Collection $labels)
     {
         $labels->transform(function ($label){ return strtolower($label);});
         return ! is_bool($labels->search($this->taskLabel)) ;
