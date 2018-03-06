@@ -109,7 +109,7 @@ class DefaultController extends Controller
     {
         $prev = $changes['previous'];
         $current = $changes['current'];
-        //dd($prev, $current);
+
         $current = collect($prev)->filter(function($labelKeep) use ($current) {
 
             if (collect($current)->pluck('id')->search($labelKeep['id']) === false) {
@@ -120,23 +120,12 @@ class DefaultController extends Controller
 
         });
 
-        $isTask = $this->isTask(collect($current)->pluck('title'));
-        if (!$isTask) {
-            return;
-        }
-
         $this->setUpdates(collect($current), $taskId);
         $this->setTracks(collect($current), $taskId);
 
         collect($current)->each(function($label) {
 
         });
-    }
-
-    private function isTask(Collection $labels)
-    {
-        $labels->transform(function ($label){ return strtolower($label);});
-        return ! is_bool($labels->search($this->taskLabel)) ;
     }
 
     private function setUpdates(Collection $labels, $taskId)
@@ -171,7 +160,7 @@ class DefaultController extends Controller
     {
         $users = Task::find($taskId)->users()->get();
 
-        $users = collect($users->toArray())->transform(function($user) use($taskId, $labels) {
+        collect($users->toArray())->transform(function($user) use($taskId, $labels) {
 
             $labels->each(function($label) use($taskId, $user) {
 
