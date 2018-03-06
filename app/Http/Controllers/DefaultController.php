@@ -107,7 +107,18 @@ class DefaultController extends Controller
 
     private function labelsProcess($changes, $taskId)
     {
-        $current = $changes['previous'];
+        $prev = $changes['previous'];
+        $current = $changes['current'];
+        //dd($prev, $current);
+        $current = collect($prev)->filter(function($labelKeep) use ($current) {
+
+            if (collect($current)->pluck('id')->search($labelKeep['id']) === false) {
+                return true;
+            }
+
+            return false;
+
+        });
 
         $isTask = $this->isTask(collect($current)->pluck('title'));
         if (!$isTask) {
