@@ -93,27 +93,27 @@ class DefaultController extends Controller
 
         $task->users()->sync($users->pluck('id')->toArray(), true);
 
-        // track the past
+        $this->setAssignPastTrack($users, $task);
+
+
+    }
+
+    private function setAssignPastTrack($users, $task)
+    {
+
         $users->each(function($user) use ($task) {
             $check = Track::where('task_id', $task->id)
                 ->where('user_id', $user['id'])
                 ->get();
-
             if ($check->count() === 0) {
                 $past =  Update::where('task_id', $task->id)->get();
-
                 collect($past->toArray())->each(function($entry) use ($user) {
                     $entry['user_id'] = $user['id'];
                     unset($entry['id']);
                     Track::create($entry);
                 });
-
             }
         });
-
-        //@TODO como funcionam as tarefas sem dono ? eu adiciono os donos ao passado no tracker ? ou trackeio a partir do momento ?
-
-
     }
 
     private function processChanges($data)
