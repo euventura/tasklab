@@ -16,7 +16,7 @@ class ReportsController extends Controller
 
     public function login()
     {
-        return Auth0::login(null, null, ['scope' => 'openid profile email'], 'code');
+        return Auth0::login(null, null, ['scope' => 'openid profile email']);
     }
 
 }
