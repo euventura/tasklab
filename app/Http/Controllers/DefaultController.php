@@ -15,6 +15,8 @@ class DefaultController extends Controller
 {
 
     private $trackedLabels = [
+        'task',
+        'history',
         'doing',
         'done',
         'ready for test',
@@ -24,20 +26,14 @@ class DefaultController extends Controller
         'need infos'
     ];
 
-    private $taskLabel = 'task';
-
-    private $hitoryLabel = 'history';
-
     public function index(Request $request)
     {
         $postData = $request->post();
-        //dd($postData);
-        $user = $this->getUser($postData['user']);
-        $project = $this->getProject($postData['project']);
+
+        $this->getUser($postData['user']);
+        $this->getProject($postData['project']);
         $task = $this->getTask($postData['object_attributes']);
-
-        $this->setAssign($postData['assignees'], $task);
-
+        $this->setAssign($postData['assignees'] ?? [], $task);
         $this->processChanges($postData);
 
         return [
@@ -68,6 +64,8 @@ class DefaultController extends Controller
             $exists = Project::find($data['id']);
         }
 
+        $exists->fill($data);
+        $exists->save();
         return $exists;
 
     }
@@ -82,6 +80,8 @@ class DefaultController extends Controller
 
         }
 
+        $exists->fill($data);
+        $exists->save();
         return $exists;
     }
 
@@ -92,6 +92,26 @@ class DefaultController extends Controller
         });
 
         $task->users()->sync($users->pluck('id')->toArray(), true);
+
+        // track the past
+        $users->each(function($user) use ($task) {
+            $check = Track::where('task_id', $task->id)
+                ->where('user_id', $user['id'])
+                ->get();
+
+            if ($check->count() === 0) {
+                $past =  Update::where('task_id', $task->id)->get();
+
+                collect($past->toArray())->each(function($entry) use ($user) {
+                    $entry['user_id'] = $user['id'];
+                    unset($entry['id']);
+                    Track::create($entry);
+                });
+
+            }
+        });
+
+        //@TODO como funcionam as tarefas sem dono ? eu adiciono os donos ao passado no tracker ? ou trackeio a partir do momento ?
 
 
     }
@@ -110,15 +130,17 @@ class DefaultController extends Controller
         $prev = $changes['previous'];
         $current = $changes['current'];
 
-        $current = collect($prev)->filter(function($labelKeep) use ($current) {
+        if (count($prev) !== 0) {
+            $current = collect($prev)->filter(function($labelKeep) use ($current) {
 
-            if (collect($current)->pluck('id')->search($labelKeep['id']) === false) {
-                return true;
-            }
+                if (collect($current)->pluck('id')->search($labelKeep['id']) === false) {
+                    return true;
+                }
 
-            return false;
+                return false;
 
-        });
+            });
+        }
 
         $this->setUpdates(collect($current), $taskId);
         $this->setTracks(collect($current), $taskId);
