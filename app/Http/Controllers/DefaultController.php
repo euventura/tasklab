@@ -23,7 +23,9 @@ class DefaultController extends Controller
         'needs info',
         'need info',
         'needs infos',
-        'need infos'
+        'need infos',
+        'backlog',
+        'sprint backlog'
     ];
 
     public function index(Request $request)
@@ -173,7 +175,7 @@ class DefaultController extends Controller
             ];
 
             Update::create($updateData);
-
+            Task::find($taskId)->fill(['status' => $label['title']])->save();
 
         });
     }

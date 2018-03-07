@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: euventura
- * Date: 3/6/18
- * Time: 1:22 PM
- */
 
 namespace App\Http\Controllers;
 
@@ -18,5 +12,12 @@ class ReportsController extends Controller
     {
         return Auth0::login(null, null, ['scope' => 'openid profile email']);
     }
+
+
+    public function stats()
+    {
+
+    }
+
 
 }

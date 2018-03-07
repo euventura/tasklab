@@ -22,4 +22,15 @@ class Task extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function updates()
+    {
+        return $this->hasMany(Update::class);
+    }
+
+    public function currentUpdate()
+    {
+        return $this->hasMany(Update::class)->orderBy('id', 'DESC')->limit(1);
+    }
+
+
 }
