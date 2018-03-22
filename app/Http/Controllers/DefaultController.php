@@ -76,8 +76,7 @@ class DefaultController extends Controller
     private function getTask(array $data)
     {
         $exists = Task::find($data['id']);
-        Log::info('task', $data);
-        print_r($data);
+
         if( $exists === null) {
             Task::create($data);
             $exists = Task::find($data['id']);
@@ -149,9 +148,27 @@ class DefaultController extends Controller
         $this->setUpdates(collect($current), $taskId);
         $this->setTracks(collect($current), $taskId);
 
-        collect($current)->each(function($label) {
+        $currentTagState = collect($current)->filter(function($currentLabel) {
+
+            if (!in_array(strtolower($currentLabel['title']), $this->trackedLabels)) {
+                return false;
+            }
+
+            if (strtolower($currentLabel['title']) === 'task') {
+                return false;
+            }
+
+            return true;
 
         });
+
+        if ($currentTagState->count() === 1) {
+            $task = Task::findOrFail($taskId);
+            $task->current_tag = $currentTagState->first()['name'];
+            $task->save();
+
+        }
+
     }
 
     private function setUpdates(Collection $labels, $taskId)
