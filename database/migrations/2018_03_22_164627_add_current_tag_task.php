@@ -14,7 +14,7 @@ class AddCurrentTagTask extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('current_tag');
+            $table->string('current_tag')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddCurrentTagTask extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('current_tag');
+            $table->dropColumn('current_tag')->nullable();
         });
     }
 }
