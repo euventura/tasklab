@@ -14,12 +14,13 @@ class Task extends Model
         'human_total_time_spent', 'human_time_estimate'
     ];
 
-    protected $dates = [
-        'last_edited_at',
-        'due_date',
+    public $casts = [
+        'last_edited_at' => 'datetime:Y-m-d H:i:s e',
+        'due_date' => 'datetime:Y-m-d H:i:s e',
+
     ];
 
-    protected $dateFormat = 'Y-m-d H:i:s e';
+    protected $dateFormat = '';
 
 
     public function project()
