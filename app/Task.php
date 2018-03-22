@@ -40,7 +40,9 @@ class Task extends Model
 
     public function setLastEditedAtAttribute($value)
     {
-        $this->attributes['last_edited_at'] = Carbon::createFromFormat('Y-m-d H:i:s e', $value)->format('Y-m-d H:i:s');
+        if ($value != null && $value != '') {
+            $this->attributes['last_edited_at'] = Carbon::createFromFormat('Y-m-d H:i:s e', $value)->format('Y-m-d H:i:s');
+        }
     }
 
 
