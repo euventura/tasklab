@@ -121,7 +121,7 @@ class DefaultController extends Controller
 
     private function processChanges($data)
     {
-        if (isset($data['changes'])) {
+        if (isset($data['changes']) && isset($data['changes']['labels'])) {
             $this->labelsProcess($data['changes']['labels'], $data['object_attributes']['id']);
 
         }
