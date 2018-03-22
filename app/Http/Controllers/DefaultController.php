@@ -10,6 +10,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class DefaultController extends Controller
 {
@@ -76,6 +77,7 @@ class DefaultController extends Controller
     {
         $exists = Task::find($data['id']);
         Log::info('task', $data);
+        print_r($data);
         if( $exists === null) {
             Task::create($data);
             $exists = Task::find($data['id']);
