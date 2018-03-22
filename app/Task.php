@@ -14,11 +14,13 @@ class Task extends Model
         'human_total_time_spent', 'human_time_estimate'
     ];
 
-    public function setLastEditedAtAttribute($value) {
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'last_edited_at',
+        'due_date',
+    ];
 
-
-        $this->atttributes['last_edited_at'] = Carbon::parse($value)->format('Y-m-d h:i:s');
-    }
 
     public function project()
     {
