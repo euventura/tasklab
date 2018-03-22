@@ -21,6 +21,8 @@ class Task extends Model
         'due_date',
     ];
 
+    protected $dateFormat = 'Y-m-d H:i:s e';
+
 
     public function project()
     {
