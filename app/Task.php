@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -12,6 +13,12 @@ class Task extends Model
         'relative_position', 'state', 'time_estimate', 'title', 'url', 'total_time_spent',
         'human_total_time_spent', 'human_time_estimate'
     ];
+
+    public function setLastEditedAtAttribute($value) {
+
+
+        $this->atttributes['last_edited_at'] = Carbon::parse($value)->format('Y-m-d h:i:s');
+    }
 
     public function project()
     {
