@@ -14,11 +14,7 @@ class Task extends Model
         'human_total_time_spent', 'human_time_estimate'
     ];
 
-    public $casts = [
-        'last_edited_at' => 'datetime:Y-m-d H:i:s e',
-        'due_date' => 'datetime:Y-m-d H:i:s e',
 
-    ];
 
     protected $dateFormat = '';
 
@@ -40,6 +36,11 @@ class Task extends Model
     public function currentUpdate()
     {
         return $this->hasMany(Update::class)->orderBy('id', 'DESC')->limit(1);
+    }
+
+    public function setLastEditedAtAttribute($value)
+    {
+        $this->attributes['last_edited_at'] = Carbon::createFromFormat('Y-m-d H:i:s e', $value)->format('Y-m-d H:i:s');
     }
 
 
