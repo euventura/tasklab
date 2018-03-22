@@ -75,7 +75,7 @@ class DefaultController extends Controller
     private function getTask(array $data)
     {
         $exists = Task::find($data['id']);
-
+        Log::info('task', $data);
         if( $exists === null) {
             Task::create($data);
             $exists = Task::find($data['id']);
