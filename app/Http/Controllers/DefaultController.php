@@ -162,7 +162,7 @@ class DefaultController extends Controller
 
         });
 
-        if ($currentTagState->count() === 1) {
+        if ($currentTagState->count() > 0) {
             $task = Task::findOrFail($taskId);
             $task->current_tag = $currentTagState->first()['name'];
             $task->save();
